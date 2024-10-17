@@ -1,0 +1,33 @@
+package com.example.failuretest
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import android.widget.TextView
+import com.example.recyclerviewdemo.Client
+
+class ClientAdapter(private val clientList: List<Client>) : RecyclerView.Adapter<ClientAdapter.ClientViewHolder>() {
+
+    class ClientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
+        val emailTextView: TextView = itemView.findViewById(R.id.emailTextView)
+        val ageTextView: TextView = itemView.findViewById(R.id.ageTextView)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_client, parent, false)
+        return ClientViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ClientViewHolder, position: Int) {
+        val client = clientList[position]
+        holder.nameTextView.text = client.name
+        holder.emailTextView.text = client.email
+        holder.ageTextView.text = client.age.toString()
+    }
+
+    override fun getItemCount(): Int {
+        return clientList.size  // (Possível erro na contagem)
+    }
+}
