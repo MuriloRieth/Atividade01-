@@ -1,0 +1,60 @@
+package com.example.recyclerviewdemo
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import android.widget.Button
+import android.widget.Toast
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ClientAdapter
+    private lateinit var nameInput: TextInputEditText
+    private lateinit var emailInput: TextInputEditText
+    private lateinit var ageInput: TextInputEditText
+    private lateinit var addClientButton: Button
+    private var clientList = mutableListOf<Client>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        nameInput = findViewById(R.id.nameInput)
+        emailInput = findViewById(R.id.emailInput)
+        ageInput = findViewById(R.id.ageInput)
+        addClientButton = findViewById(R.id.addClientButton)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        clientList = mutableListOf()  // Iniciando com lista vazia
+
+        adapter = ClientAdapter(clientList)  // Inicializando o Adapter
+        recyclerView.adapter = adapter
+
+        addClientButton.setOnClickListener {
+            val name = nameInput.text.toString()
+            val email = emailInput.text.toString()
+            val age = ageInput.text.toString()
+
+            if (name.isEmpty() || email.isEmpty() || age.isEmpty()) {
+                Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            } else {
+                addNewClient(name, email, age.toInt())
+            }
+        }
+    }
+
+    private fun addNewClient(name: String, email: String, age: Int) {
+        // Adiciona o cliente na lista e atualiza o RecyclerView
+        val newClient = Client(name, email, age)
+        clientList.add(newClient)
+        adapter.notifyItemInserted(clientList.size)  // (Erro de lógica na inserção)
+        nameInput.text?.clear()
+        emailInput.text?.clear()
+        ageInput.text?.clear()
+    }
+}
